@@ -95,5 +95,17 @@ RUN set -ex; \
 COPY modprobe.sh /usr/local/bin/modprobe
 COPY docker-entrypoint.sh /usr/local/bin/
 
+# docker-compose
+RUN set -x && \
+    apk add --no-cache -t .deps ca-certificates curl && \
+    # Install docker-compose
+    # https://docs.docker.com/compose/install/
+    DOCKER_COMPOSE_URL=https://github.com$(curl -L https://github.com/docker/compose/releases/1.18.0 | grep -Eo 'href="[^"]+docker-compose-Linux-x86_64' | sed 's/^href="//' | head -1) && \
+    curl -Lo /usr/local/bin/docker-compose $DOCKER_COMPOSE_URL && \
+    chmod a+rx /usr/local/bin/docker-compose && \
+    \
+    # Clean-up
+    apk del .deps
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["sh"]
