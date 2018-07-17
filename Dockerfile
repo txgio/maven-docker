@@ -107,5 +107,7 @@ RUN set -x && \
     # Clean-up
     apk del .deps
 
+RUN apk add --no-cache git
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["sh"]
